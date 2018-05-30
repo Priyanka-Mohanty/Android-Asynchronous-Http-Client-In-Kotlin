@@ -6,7 +6,6 @@ import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.JsonHttpResponseHandler
 import com.loopj.android.http.RequestParams
 import cz.msebera.android.httpclient.Header
-import org.json.JSONArray
 import org.json.JSONObject
 
 class MyLoopjTask constructor(mContext: Context, listener: OnLoopjCompleted) {
@@ -15,7 +14,7 @@ class MyLoopjTask constructor(mContext: Context, listener: OnLoopjCompleted) {
     internal var requestParams: RequestParams
 
     internal var BASE_URL = "http://www.omdbapi.com/?"
-    internal var BASE_URL_MOCKY = "http://www.mocky.io/v2/5b0 d433a3100004d009d55cd"
+    internal var BASE_URL_MOCKY = "http://www.mocky.io/v2/5b0d433a3100004d009d55cd"
 
     lateinit var jsonResponse: String
     var context: Context
@@ -62,7 +61,13 @@ class MyLoopjTask constructor(mContext: Context, listener: OnLoopjCompleted) {
 
     fun executeLoopjCall() {
         try {
-            asyncHttpClient.get(context, BASE_URL_MOCKY, object : JsonHttpResponseHandler() {
+            //add header in url
+            requestParams.put("apikey", "5a2eb90f") // your own API key generate in this "http://www.omdbapi.com/?"
+
+            asyncHttpClient.get(BASE_URL_MOCKY, requestParams, object : JsonHttpResponseHandler() {
+
+
+
                 override fun onSuccess(statusCode: Int, headers: Array<Header>, response: JSONObject) {
                     super.onSuccess(statusCode, headers, response)
                     jsonResponse = response.toString()
@@ -72,11 +77,12 @@ class MyLoopjTask constructor(mContext: Context, listener: OnLoopjCompleted) {
 
                 override fun onFailure(statusCode: Int, headers: Array<Header>, throwable: Throwable, errorResponse: JSONObject) {
                     super.onFailure(statusCode, headers, throwable, errorResponse)
-                    loopjListener.taskCompleted(jsonResponse)
+                    loopjListener.taskCompleted(errorResponse.toString())
                     Log.e(TAG, "onFailure: " + errorResponse)
                 }
 
-            })
+            }
+            );
         } catch (e: Exception) {
             e.printStackTrace()
         }
