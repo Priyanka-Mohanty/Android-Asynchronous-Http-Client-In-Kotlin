@@ -1,6 +1,3 @@
-Android-Asynchronous-Http-Client-In-Kotlin wiki
-
-
 # Android-Asynchronous-Http-Client-In-Kotlin
 Implementing Android Asynchronous Http Client in Kotlin using Loopj library
 
